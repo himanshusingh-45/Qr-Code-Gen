@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Generator</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+   <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.min.js"></script>
+   <style>
+    body {
+  background: linear-gradient(45deg, #6a11cb, #2575fc);
+  color: white;
+  font-family: 'Arial', sans-serif;
+  overflow-x: hidden;
+ }
+
+.container {
+  margin-top: 50px;
+  max-width: 800px;
+
+}
+
+.input-group, .button-group {
+  width: 100%;
+}
+
+.input-group .form-control {
+  text-align: center;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#qrcode canvas {
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+input {
+  color: #000;
+}
+
+.btn-primary {
+  background-color: #ff5722;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #e64a19;
+}
+
+   </style>
+</head>
+<body>
+  <!-- Main Content -->
+  <div class="container text-center">
+    <h1 class="display-4 my-4">QR Code Generator</h1>
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" id="linkInput" placeholder="Enter your link">
+    </div>
+    <div class="button-group mb-3">
+      <button class="btn btn-primary" type="button" id="generateBtn">Generate QR Code</button>
+      <button class="btn btn-secondary" type="button" id="customizeBtn" data-toggle="modal" data-target="#customizeModal">Customize</button>
+    </div>
+    <div id="qrcode" class="mt-4"></div>
+  </div>
+
+  <!-- Customize Modal -->
+  <div class="modal fade" id="customizeModal" tabindex="-1" role="dialog" aria-labelledby="customizeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="customizeModalLabel">Customize QR Code</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="dotColor">Dot Color</label>
+              <input type="color" class="form-control" id="dotColor" value="#4267b2">
+            </div>
+            <div class="form-group">
+              <label for="backgroundColor">Background Color</label>
+              <input type="color" class="form-control" id="backgroundColor" value="#ffffff">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="applyCustomization">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    
+    let dotColor = "#4267b2";
+let backgroundColor = "#ffffff";
+
+document.getElementById('generateBtn').addEventListener('click', function() {
+  let link = document.getElementById('linkInput').value;
+  if (link) {
+    generateQRCode(link, dotColor, backgroundColor);
+  } else {
+    alert('Please enter a link');
+  }
+});
+
+document.getElementById('applyCustomization').addEventListener('click', function() {
+  dotColor = document.getElementById('dotColor').value;
+  backgroundColor = document.getElementById('backgroundColor').value;
+  $('#customizeModal').modal('hide');
+  let link = document.getElementById('linkInput').value;
+  if (link) {
+    generateQRCode(link, dotColor, backgroundColor);
+  }
+});
+
+function generateQRCode(link, dotColor, backgroundColor) {
+  const qrCode = new QRCodeStyling({
+    width: 300,
+    height: 300,
+    data: link,
+    dotsOptions: {
+      color: dotColor,
+      type: "rounded"
+    },
+    backgroundOptions: {
+      color: backgroundColor,
+    },
+    imageOptions: {
+      crossOrigin: "anonymous",
+      margin: 20
+    }
+  });
+
+  document.getElementById('qrcode').innerHTML = "";
+  qrCode.append(document.getElementById('qrcode'));
+}
+
+  </script>
+</body>
+</html>
